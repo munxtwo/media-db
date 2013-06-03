@@ -27,27 +27,26 @@ var appRouter = Backbone.Router.extend({
         this.headerView.select('home-menu');
         $('.carousel').carousel('cycle');
         
+        // this.mediaListView = new MediaListView(false);
         var upcomingMedia = new MediaCollection();
         upcomingMedia.findByStatus("Upcoming");
+        // upcomingMedia.url = './api/media/status/Upcoming';
+
         upcomingMedia.fetch({
         	success: function(data) {
-        		$("#content", this.el).append(new MediaListView({model: data}).render().el);
+                $("#content", this.el).append(new MediaListView({model: data, sidebar: "noshow"}).render().el);
+        		// $("#content", this.el).append(this.MediaListView({model: data}).render().el);
     		}
         });
-//        $("#content", this.el).append(new MediaListView({model: upcomingMedia}).render().el);
-//        alert(upcomingMedia);
-//        upcomingMedia.fetch({
-//        	success: function (data) {
-//        		alert(data);
-//        	}
-//        });
+
     },
     
     allmedia: function() {
     	var collection = new MediaCollection();
     	collection.fetch({
     		success: function(data) {
-    			$("#content").html(new MediaListView({model: data}).render().el);
+                var years = _.uniq(collection.pluck("releaseYear"));
+    			$("#content").html(new MediaListView({model: data, sidebar: "show", years: years}).render().el);
     		}
     	});
 

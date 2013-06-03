@@ -123,7 +123,7 @@ public class SeriesDatabase {
 	
 	public ArrayList<Media> findAll() {
 		ArrayList<Media> mediaList = new ArrayList<Media>();
-		String query = "SELECT * from Media";
+		String query = "SELECT * from Media ORDER BY release_year";
 		try {
 			ResultSet rs = statement.executeQuery(query);
 			while (rs.next()) {
