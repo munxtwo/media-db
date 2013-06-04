@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ktay.mediaDB</groupId>
-	<artifactId>seriesDatabase</artifactId>
+	<artifactId>mediaDB</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>ktay-mediaDB WebApp</name>
@@ -18,7 +18,7 @@
 				<artifactId>tomcat6-maven-plugin</artifactId>
 				<version>2.0</version>
 				<configuration>
-					<warDirectory>target/seriesDatabase-0.0.1-SNAPSHOT</warDirectory>
+					<warDirectory>target/mediaDB-0.0.1-SNAPSHOT</warDirectory>
 				</configuration>
 			</plugin>
 			<plugin>
