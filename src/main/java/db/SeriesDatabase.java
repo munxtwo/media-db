@@ -169,4 +169,22 @@ public class SeriesDatabase {
 		}
 		return mediaList;
 	}
+	
+	public ArrayList<Media> findByColumn(String columName, String value) {
+		ArrayList<Media> mediaList = new ArrayList<Media>();
+		String query = "SELECT * from Media where " + columName + "= ?";
+		try {
+			PreparedStatement ps = conn.prepareStatement(query);
+			ps.setString(1, value);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				mediaList.add(processRow(rs));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Cannot execute query: " + query);
+		}
+		return mediaList;
+	}
+	
 }

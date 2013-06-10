@@ -6,14 +6,16 @@ window.MediaListView = Backbone.View.extend({
 
 	events: {
 		"click .year": "filterByYear",
+		"click .all": "render",
 	},
 
 	initialize: function() {
 		this.columnHeaders = new MediaListHeaders();
+		this.title = this.options.title;
 	},
 	
 	render: function() {
-		$(this.el).html(this.template({model:this.model, sidebar:this.options.sidebar, years:this.options.years}));
+		$(this.el).html(this.template({model:this.model, sidebar:this.options.sidebar, years:this.options.years, title:this.title}));
 		
 		_.each(this.options.years, function(year) {
 			$('#years', this.el).append(new YearListView({model:year}).render().el);
@@ -26,16 +28,25 @@ window.MediaListView = Backbone.View.extend({
 		}, this);
 		
 	    return this;
-	  },
-
+	},
+	  
 	filterByYear: function() {
 		var id = arguments[0].currentTarget.id;
+		this.title = "List of Series in " + id; 
+		$("h1").html(this.title);
 		
 		$('.nav-pills li').removeClass('active');
         $('.' + id).addClass('active');
-        //var filtered = this.model.where({year: id});
-        var filtered = this.model;
-        alert(filtered.get(1).get("engName"));
+
+        var filtered = this.collection.filter(function(media) {
+        	return media.get("releaseYear") == id;
+        });
+        
+        $('#columnBody', this.el).empty();
+        _.each(filtered, function(media) {
+        	$('#columnBody', this.el).append(new MediaListItemView({model:media}).render().el);
+        }, this);
+        
 	},
 
 });
@@ -83,7 +94,7 @@ window.YearListView = Backbone.View.extend({
 	},
 
 	render: function() {
-		$(this.el).attr('id', '' + this.year).addClass('year ' + this.year).html(_.template("<a href='#media/year/<%=year%>'><%=year%></a>", {year:this.model}));
+		$(this.el).attr('id', '' + this.year).addClass('year ' + this.year).html(_.template("<a href='#media'><%=year%></a>", {year:this.model}));
 		return this;
 	}
 });

@@ -33,25 +33,20 @@ window.Media = Backbone.Model.extend({
 
 window.MediaCollection = Backbone.Collection.extend({
 	
+	initialize: function(options) {
+		this.baseUrl = "./api/media/";
+		if (typeof options === "undefined") {
+			this.url = this.baseUrl;
+		} 
+		else {
+			this.url = this.baseUrl + options.url;
+		}
+	},
+	
 	model: Media,
 	
-	url: "./api/media",
+	url: function () {
+		return this.url;
+	},
 	
-	findByStatus: function (status) {
-		
-		url: "./api/media/status/" + status;
-		console.log('findByStatus: ' + status);
-		this.reset();
-//        var self = this;
-//        $.ajax({
-//            url:url,
-//            dataType:"json",
-//            success:function (data) {
-//                console.log("search success: " + data.length);
-//                self.reset(data);
-//                alert(data.id);
-//            }
-//        });
-	}
-
 });

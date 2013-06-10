@@ -16,10 +16,8 @@ public class MediaResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public ArrayList<Media> findAll() {
-//		System.out.println("findAll");
 		db.connectDB();
 		ArrayList<Media> mediaList = db.findAll();
-//		System.out.println(mediaList);
 		db.closeDB();
 		return mediaList;
 	}
@@ -41,4 +39,5 @@ public class MediaResource {
 		db.closeDB();
 		return media;
 	}
+	
 }

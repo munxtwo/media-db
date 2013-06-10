@@ -4,7 +4,6 @@ var appRouter = Backbone.Router.extend({
 		"": "home",
 		"media": "allmedia",
 		"media/:id": "mediaDetails",
-//		"list": "mediaList"
 	},
 	
 	initialize: function () {
@@ -12,7 +11,8 @@ var appRouter = Backbone.Router.extend({
         $('.header').html(this.headerView.render().el);
         $('.carousel').carousel({
         	  interval: 2000
-        	});
+    	});
+        this.title = "";
     },
     
     home: function () {
@@ -27,15 +27,12 @@ var appRouter = Backbone.Router.extend({
         this.headerView.select('home-menu');
         $('.carousel').carousel('cycle');
         
-        // this.mediaListView = new MediaListView(false);
-        var upcomingMedia = new MediaCollection();
-        upcomingMedia.findByStatus("Upcoming");
-        // upcomingMedia.url = './api/media/status/Upcoming';
-
+        var upcomingMedia = new MediaCollection({url: "status/Upcoming"});
+        var that = this;
         upcomingMedia.fetch({
         	success: function(data) {
-                $("#content", this.el).append(new MediaListView({model: data, sidebar: "noshow"}).render().el);
-        		// $("#content", this.el).append(this.MediaListView({model: data}).render().el);
+        		that.title = "List Of Upcoming Series";
+                $("#content", this.el).append(new MediaListView({model: data, sidebar: "noshow", title: that.title}).render().el);
     		}
         });
 
@@ -43,10 +40,13 @@ var appRouter = Backbone.Router.extend({
     
     allmedia: function() {
     	var collection = new MediaCollection();
+    	var that = this;
     	collection.fetch({
     		success: function(data) {
                 var years = _.uniq(collection.pluck("releaseYear"));
-    			$("#content").html(new MediaListView({model: data, sidebar: "show", years: years}).render().el);
+                that.title = "List Of All Series";
+    			$("#content").html(new MediaListView({model: data, collection: collection, 
+    				sidebar: "show", years: years, title: that.title}).render().el);
     		}
     	});
 
@@ -62,17 +62,8 @@ var appRouter = Backbone.Router.extend({
                  $('#content').html(new MediaView({model: data}).render().el);
              }
          });
-    }
-
-//	mediaList: function() {
-//		this.mediaListHeaders = new mediaListHeaders().get("columnNames");
-////		alert(this.mediaListHeaders.get("columnNames"));
-//		this.mediaListView = new mediaListView({model:this.mediaListHeaders});
-////		this.mediaListHeaders.fetch();
-//		$('#media').html(this.mediaListView.render().el);
-////		$('#media').html('<h1>test</h1>');
-//	}
-	
+    },
+    
 });
 
 templateLoader.load(["HomeView", "HeaderView", "MediaListView", "MediaListHeaderItemView", "MediaListItemView", "MediaView"],
